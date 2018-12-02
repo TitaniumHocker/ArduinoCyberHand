@@ -22,19 +22,19 @@ void setup() {
 
 void loop() {
   if (radio.available()) {
-    char text[32] = "";
-    radio.read(&text, sizeof(text));
-    Serial.println(text);
-    
-    if (text[1] == "u" && turned == false){
-      S1.write(180);
+    byte msg = B0000;
+    radio.read(&msg, 4);
+    Serial.println(msg);
+    //delay(500);
+    if (msg == B1101 && turned == false){
+      S1.write(90);
       turned = true;
       delay(1000);
-    } else if (text[1] == "u" && turned == true){
+    } else if (msg == B1101 && turned == true){
       S1.write(0);
       turned = false;
       delay(1000);
     }
-    
+    msg = B0000;
   }
 }
