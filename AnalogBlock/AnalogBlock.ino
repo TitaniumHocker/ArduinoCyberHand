@@ -3,7 +3,8 @@
 
 RF24 radio(9, 10); // CE, CSN
 const byte address[6] = "00001";
-int analogHandPin = A0;
+int EMG_PIN = A0;
+int threshold = 0;
 
 // kalman
 float varVolt = 3.65;  // среднее отклонение (ищем в excel = 3,655747022)
@@ -17,6 +18,7 @@ float Xe = 0.0;
 //
 
 void setup() {
+  Serial.begin(9600);
   radio.begin();
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_MIN);
@@ -25,18 +27,20 @@ void setup() {
 
 void loop() {
   const byte msg = B1101;
-  radio.write(&msg, 4);
-  delay(5000);
-  /*
-  float sensorValue = analogRead(analogHandPin);
+  float sensorValue = analogRead(EMG_PIN);
   float filtered_sensorValue = filter(sensorValue);
+  threshold = filtered_sensorValue * 1.5;
   Serial.print("$");
   Serial.print(sensorValue);
   Serial.print(" ");
   Serial.print(filtered_sensorValue);
+  Serial.print(" ");
+  Serial.print(threshold);
   Serial.println(";");
+  if (filtered_sensorValue > threshold){
+    radio.write(&msg, 4);
+  }
   delay(2);
-  */
 }
 
 float filter(float val) {  //функция фильтрации
