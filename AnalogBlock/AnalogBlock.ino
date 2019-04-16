@@ -1,13 +1,13 @@
 #include <SoftwareSerial.h>
 
-#define EMG_PIN1 A2;
-#define EMG_PIN2 A7;
-#define BT_RxD 6;
-#define BT_TxD 7;
+const int EMG_PIN1 = A2;
+const int EMG_PIN2 = A7;
+const int BT_RxD_PIN = 6;
+const int BT_TxD_PIN = 7;
 
-const byte standByCommand = B0001;
-const byte toFlatCommand = B0002;
-const byte toFistCommand = B0003;
+const byte standByCommand = 1;
+const byte toFlatCommand = 2;
+const byte toFistCommand = 3;
 
 double multipler = 1.5;
 int threshold;
@@ -16,7 +16,7 @@ bool firstStart = true;
 int startTime;
 int timer;
 
-SoftwareSerial btSerial(BT_RxD, BT_TxD);
+SoftwareSerial btSerial(BT_RxD_PIN, BT_TxD_PIN);
 
 // kalman
 double varVolt = 3.65;  // среднее отклонение (ищем в excel = 3,655747022)
